@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- EditText pour entrer le nom de la ville -->
+    <EditText
+        android:id="@+id/cityInput"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Entrez le nom de la ville" />
+
+    <!-- Button pour ajouter une ville -->
+    <Button
+        android:id="@+id/addCityButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ajouter une ville" />
+
+    <!-- Button pour rafraîchir la météo -->
+    <Button
+        android:id="@+id/refreshButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Rafraîchir" />
+
+    <!-- Nouveau Button pour récupérer la météo d'une ville -->
+    <Button
+        android:id="@+id/fetchWeatherButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Récupérer la météo" />
+
+    <!-- TextView pour afficher le résultat de la météo -->
+    <TextView
+        android:id="@+id/weatherResult"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Météo affichée ici"
+        android:textSize="18sp"
+        android:paddingTop="16dp"
+        android:textColor="#000000" />
+
+    <!-- ListView pour afficher les villes -->
+    <ListView
+        android:id="@+id/cityListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+</LinearLayout>
