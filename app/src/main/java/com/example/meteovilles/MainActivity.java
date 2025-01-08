@@ -129,7 +129,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void fetchWeatherForCity(City city) {
-        String url = BASE_URL + city.getName() + "&appid=" + API_KEY + "&units=metric&lang=fr"; // URL avec la clé API et la ville
+        String url = BASE_URL + city.getName() + "&appid=" + API_KEY + "&units=metric&lang=fr";  // URL avec la langue en français et la conversion en Celsius
         Request request = new Request.Builder().url(url).build();
 
         client.newCall(request).enqueue(new Callback() {
@@ -145,19 +145,50 @@ public class MainActivity extends AppCompatActivity {
 
                     // Analyser la réponse JSON
                     JsonObject jsonObject = JsonParser.parseString(jsonResponse).getAsJsonObject();
-                    // Extraire la température (en °C)
+
+                    // Extraire la température actuelle en °C
                     String temperature = jsonObject.getAsJsonObject("main").get("temp").getAsString() + "°C";
+
+                    // Extraire la température ressentie
+                    String feelsLike = jsonObject.getAsJsonObject("main").get("feels_like").getAsString() + "°C";
+
+                    // Extraire la pression atmosphérique
+                    String pressure = jsonObject.getAsJsonObject("main").get("pressure").getAsString() + " hPa";
+
+                    // Extraire l'humidité
+                    String humidity = jsonObject.getAsJsonObject("main").get("humidity").getAsString() + "%";
 
                     // Extraire la description du temps
                     JsonArray weatherArray = jsonObject.getAsJsonArray("weather");
                     String description = weatherArray.get(0).getAsJsonObject().get("description").getAsString();
 
+                    // Extraire la vitesse et la direction du vent
+                    JsonObject windObject = jsonObject.getAsJsonObject("wind");
+                    String windSpeed = windObject.get("speed").getAsString() + " m/s";
+                    String windDirection = windObject.get("deg").getAsString() + "°";
+
+                    // Extraire l'heure du lever du soleil et du coucher du soleil
+                    JsonObject sysObject = jsonObject.getAsJsonObject("sys");
+                    String sunrise = sysObject.get("sunrise").getAsString();
+                    String sunset = sysObject.get("sunset").getAsString();
+
                     // Mettre à jour les données de la ville
                     city.setTemperature(temperature);
                     city.setWeatherDescription(description);
 
-                    // Rafraîchir l'affichage
-                    runOnUiThread(() -> cityAdapter.notifyDataSetChanged());
+                    // Mise à jour de l'UI pour afficher toutes les informations
+                    runOnUiThread(() -> {
+                        String detailedWeather = "Température: " + temperature + "\n" +
+                                "Ressentie: " + feelsLike + "\n" +
+                                "Pression: " + pressure + "\n" +
+                                "Humidité: " + humidity + "\n" +
+                                "Description: " + description + "\n" +
+                                "Vent: " + windSpeed + " à " + windDirection + "\n" +
+                                "Lever du soleil: " + sunrise + "\n" +
+                                "Coucher du soleil: " + sunset;
+                        weatherResult.setText(detailedWeather);
+                        cityAdapter.notifyDataSetChanged();
+                    });
                 } else {
                     runOnUiThread(() -> Toast.makeText(MainActivity.this, "Erreur lors de la récupération de la météo", Toast.LENGTH_SHORT).show());
                 }
